@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
+  <fileHeader companyName="Unknown" productName="Unnamed" productVersion="1" creationDateTime="2026-05-04T11:37:49"/>
+  <contentHeader name="Unnamed" modificationDateTime="2026-05-04T11:37:49">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="16" y="16"/>
+      </fbd>
+      <ld>
+        <scaling x="16" y="16"/>
+      </ld>
+      <sfc>
+        <scaling x="16" y="16"/>
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes/>
+    <pous>
+      <pou name="main" pouType="program">
+        <interface>
+          <inputVars>
+            <variable name="Input1">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+            <variable name="Input2">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+            <variable name="Start">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+            <variable name="Stop">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+          </inputVars>
+          <outputVars>
+            <variable name="Output1">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+            <variable name="Output2">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+            <variable name="Motor">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+          </outputVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml:p><![CDATA[Output1 := Input1 AND Input2;
+
+(* This turns Output1 ON only when both Input1 AND Input2 are ON *)
+(* Like a safety interlock - both doors must be closed before motor starts *)
+
+(* OR Logic - Output2 turns ON when EITHER Input1 OR Input2 is ON *)
+Output2 := Input1 OR Input2;
+
+(* Latch circuit - START button turns motor on, STOP turns it off *)
+(* Motor holds itself on even after START is released *)
+IF Start AND NOT Stop THEN
+    Motor := TRUE;
+ELSIF Stop THEN
+    Motor := FALSE;
+END_IF;]]></xhtml:p>
+          </ST>
+        </body>
+        <documentation>
+          <xhtml:p><![CDATA[ ]]></xhtml:p>
+        </documentation>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations>
+      <configuration name="Config0">
+        <resource name="Res0">
+          <task name="task0" priority="1" interval="T#20ms">
+            <pouInstance name="instance0" typeName="main"/>
+          </task>
+        </resource>
+      </configuration>
+    </configurations>
+  </instances>
+</project>
